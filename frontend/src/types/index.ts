@@ -3,7 +3,11 @@ export interface User {
   email: string;
   is_active: boolean;
 }
-
+export interface User {
+  id: number;
+  email: string;
+  is_active: boolean;
+}
 export interface AuthState {
   user: User | null;
   token: string | null;
