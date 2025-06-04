@@ -16,8 +16,9 @@ echo "Current working directory is boefore installtion: $(pwd)"
 pwd
 pip3 install -r ./backend/requirements.txt
 echo "Current working directory is after installion: $(pwd)"
-pwd
-cd app/backend
+echo "ls after installation: $(ls)"
+cd backend
+echo "ls after cd to the backend $(ls)"
 echo "Current working directory is beofore running: $(pwd)"
 pwd
 uvicorn main:app --host 0.0.0.0 --port 8080
