@@ -21,4 +21,5 @@ cd backend
 echo "ls after cd to the backend $(ls)"
 echo "Current working directory is beofore running: $(pwd)"
 pwd
-uvicorn main:app --host 0.0.0.0 --port 8080
+export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+python -m uvicorn main:app --host 0.0.0.0 --port 8080
