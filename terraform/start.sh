@@ -10,4 +10,4 @@ pip3 install fastapi uvicorn
 pip3 install -r ./backend/requirements.txt
 
 # Start the application
-uvicorn backend.main:app --host 0.0.0.0 --port 8080
+uvicorn main:app --host 0.0.0.0 --port 8080
