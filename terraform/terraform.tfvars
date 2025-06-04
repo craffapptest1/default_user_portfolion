@@ -1,0 +1,8 @@
+region = "us-east-1"
+customer_name = "portfolion"
+project = "portfolion"
+repository_url = "https://github.com/craffapptest1/default_user_portfolion.git"
+branch = "advance"
+db_password = "portfolion_password"
+db_username = "postgres"
+db_name = "portfolion_db"
