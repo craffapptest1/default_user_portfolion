@@ -24,7 +24,6 @@ else
     exit 1
 fi
 
-# Check for FastAPI app object
 echo "=== Checking for FastAPI app object ==="
 cd backend
 python -c "
