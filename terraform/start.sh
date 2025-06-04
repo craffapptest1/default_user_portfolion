@@ -1,40 +1,79 @@
 #!/bin/bash
 set -e
 
-echo "Current working directory is: $(pwd)"
-pwd
+echo "=== FastAPI Debug Script ==="
+echo "Current directory: $(pwd)"
 
-# Navigate to the parent directory of the script
-cd "$(dirname "$0")/.."
-echo "Current working directory is: $(pwd)"
-pwd
+# Navigate to the app directory
+cd /app
 
-# Activate the virtual environment
+# Activate virtual environment
 source venv/bin/activate
 
-echo "Current working directory is: $(pwd)"
-pwd
+# Check Python version
+echo "Python version: $(python --version)"
 
-# Upgrade pip and install dependencies
-pip3 install --upgrade pip
-pip3 install fastapi uvicorn
+# Check if main.py exists and its structure
+echo "=== Checking main.py ==="
+if [ -f "backend/main.py" ]; then
+    echo "main.py exists"
+    echo "First 20 lines of main.py:"
+    head -20 backend/main.py
+else
+    echo "ERROR: main.py not found in backend directory"
+    exit 1
+fi
 
-echo "Current working directory before installation: $(pwd)"
-pwd
-
-pip3 install -r ./backend/requirements.txt
-
-echo "Current working directory after installation: $(pwd)"
-echo "ls after installation: $(ls)"
-
+# Check for FastAPI app object
+echo "=== Checking for FastAPI app object ==="
 cd backend
-echo "ls after cd to the backend: $(ls)"
+python -c "
+try:
+    import main
+    print('main.py imports successfully')
+    if hasattr(main, 'app'):
+        print('app object found in main.py')
+        print(f'App type: {type(main.app)}')
+    else:
+        print('ERROR: No app object found in main.py')
+except Exception as e:
+    print(f'ERROR importing main.py: {e}')
+    import traceback
+    traceback.print_exc()
+"
 
-echo "Current working directory before running: $(pwd)"
-pwd
+# Check dependencies
+echo "=== Checking key dependencies ==="
+python -c "
+import sys
+try:
+    import fastapi
+    print(f'FastAPI version: {fastapi.__version__}')
+except ImportError as e:
+    print(f'ERROR: FastAPI not installed: {e}')
 
-# Set Python path
+try:
+    import uvicorn
+    print(f'Uvicorn version: {uvicorn.__version__}')
+except ImportError as e:
+    print(f'ERROR: Uvicorn not installed: {e}')
+"
+
+# Try to start the server with more verbose output
+echo "=== Attempting to start server with debug info ==="
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+python -c "
+import sys
+sys.path.insert(0, '.')
+try:
+    from main import app
+    print('Successfully imported app from main')
+    print(f'App object: {app}')
+except Exception as e:
+    print(f'Failed to import app: {e}')
+    import traceback
+    traceback.print_exc()
+"
 
-# Start the FastAPI server
-python -m uvicorn main:app --host 0.0.0.0 --port 8080
+echo "=== Trying uvicorn with verbose logging ==="
+python -m uvicorn main:app --host 0.0.0.0 --port 8080 --log-level debug --reload
