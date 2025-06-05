@@ -2,7 +2,7 @@
 set -e
 
 echo "=== FastAPI Debug Script ==="
-echo "Current directory: $(pwd)"
+echo "Current directory new: $(pwd)"
 
 # Navigate to the app directory
 cd /app
